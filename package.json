@@ -9,19 +9,30 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "15.2.5"
+    "@solana/spl-memo": "^0.2.3",
+    "@solana/spl-token": "^0.3.2",
+    "@solana/web3.js": "^1.98.0",
+    "@wagmi/core": "^2.16.7",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.6.5",
+    "next": "15.2.5",
+    "numeral": "^2.0.6",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "swr": "^2.3.3",
+    "viem": "^2.26.5",
+    "wagmi": "^2.14.16"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
+    "@types/node": "^20",
+    "@types/numeral": "^2.0.5",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "eslint": "^9",
     "eslint-config-next": "15.2.5",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
