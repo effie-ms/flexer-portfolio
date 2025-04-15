@@ -2,6 +2,7 @@ import {useEffect, useSyncExternalStore} from "react";
 import {useToast} from "@/context/ToastProvider";
 import {inscriptionFSM, InscriptionState} from "@/utils/inscriptionFSM";
 
+// This hook is used to manage the state of the inscription process
 export const useInscriptionStatus = () => {
   return useSyncExternalStore(
     inscriptionFSM.subscribe.bind(inscriptionFSM),
@@ -32,6 +33,9 @@ export const useInscriptionFlow = () => {
             break;
           case "failed":
             showToast("Transaction failed");
+            break;
+          case "rejected":
+            showToast("Transaction rejected");
             break;
         }
       }

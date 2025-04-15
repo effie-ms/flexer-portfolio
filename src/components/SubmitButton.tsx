@@ -5,8 +5,10 @@ import {
   useInscriptionFlow,
   useInscriptionStatus,
 } from "@/hooks/useInscriptionFlow";
+import clsx from "clsx";
 
 interface SubmitButtonProps {
+  isVisible: boolean;
   selectedAccount: WalletType;
   handleSubmitToChain: () => Promise<string | null>;
 }
@@ -25,6 +27,7 @@ const getTransactionUrl = (txHash: string | null, chainType: ChainType) => {
 };
 
 export const SubmitButton = ({
+  isVisible,
   selectedAccount,
   handleSubmitToChain,
 }: SubmitButtonProps) => {
@@ -34,8 +37,10 @@ export const SubmitButton = ({
   const status = useInscriptionStatus();
 
   const isSubmitting = useMemo(() => {
-    return !["idle", "completed", "failed"].includes(status);
+    return !["idle", "completed", "failed", "rejected"].includes(status);
   }, [status]);
+
+  console.log(status)
 
   const transactionUrl = getTransactionUrl(
     transactionHash,
@@ -43,7 +48,7 @@ export const SubmitButton = ({
   );
 
   return (
-    <div className="relative">
+    <div className={clsx("relative", {hidden: !isVisible})}>
       <button
         onClick={async () => {
           const txHash = await handleSubmitToChain();
@@ -53,7 +58,7 @@ export const SubmitButton = ({
         className={`px-4 py-2 rounded-xl border font-bold cursor-pointer transition duration-300 ease-in-out text-sm
         ${
           isSubmitting
-            ? "text-gray-400 border-gray-400 cursor-not-allowed"
+            ? "text-gray-300 border-gray-300 cursor-not-allowed animate-pulse"
             : "text-pink-500 border-pink-500 hover:bg-pink-500 hover:text-white"
         }
       `}

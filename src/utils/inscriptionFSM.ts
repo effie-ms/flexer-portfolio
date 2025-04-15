@@ -1,4 +1,3 @@
-// fsm/InscriptionFSM.ts
 export type InscriptionState =
   | "idle"
   | "preparing_message"
@@ -6,7 +5,8 @@ export type InscriptionState =
   | "sending_transaction"
   | "waiting_confirmation"
   | "completed"
-  | "failed";
+  | "failed"
+  | "rejected";
 
 type Event =
   | "START"
@@ -14,7 +14,8 @@ type Event =
   | "SIGNED"
   | "SENT"
   | "CONFIRMED"
-  | "ERROR";
+  | "ERROR"
+  | "REJECTED";
 
 type Listener = (state: InscriptionState) => void;
 
@@ -24,11 +25,12 @@ const transitions: Record<
 > = {
   idle: {START: "preparing_message"},
   preparing_message: {MESSAGE_PREPARED: "awaiting_signature", ERROR: "failed"},
-  awaiting_signature: {SIGNED: "sending_transaction", ERROR: "failed"},
+  awaiting_signature: {SIGNED: "sending_transaction", ERROR: "failed", REJECTED: "rejected",},
   sending_transaction: {SENT: "waiting_confirmation", ERROR: "failed"},
   waiting_confirmation: {CONFIRMED: "completed", ERROR: "failed"},
-  completed: {},
-  failed: {},
+  completed: {START: "preparing_message"},
+  failed: {START: "preparing_message"},
+  rejected: {START: "preparing_message"},
 };
 
 class FSM {
@@ -39,18 +41,13 @@ class FSM {
     return this.state;
   }
 
-  subscribe(callback: () => void) {
+  subscribe(callback: Listener) {
     this.listeners.add(callback);
     return () => this.listeners.delete(callback);
   }
 
   onTransition(listener: Listener): () => void {
-    this.listeners.add(listener);
-
-    // Return an unsubscribe function
-    return () => {
-      this.listeners.delete(listener);
-    };
+    return this.subscribe(listener);
   }
 
   private transition(event: Event) {
@@ -78,6 +75,9 @@ class FSM {
   }
   error() {
     this.transition("ERROR");
+  }
+  rejected() {
+    this.transition("REJECTED");
   }
 }
 

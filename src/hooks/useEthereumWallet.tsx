@@ -2,7 +2,7 @@ import {useEffect, useMemo, useState} from "react";
 import {useAccount, useConnect, useDisconnect} from "wagmi";
 import {EthereumWalletProvider, WalletType} from "@/types/wallets";
 import {inscriptionFSM} from "@/utils/inscriptionFSM";
-import {parseEther} from "viem";
+import {parseEther, UserRejectedRequestError} from "viem";
 import {sepolia} from "wagmi/chains";
 import {
   getWalletClient,
@@ -81,13 +81,25 @@ export const useEthereumWallet = (
 
       inscriptionFSM.signed();
 
-      const txHash = await walletClient.sendTransaction({
-        account: activeAddress as `0x${string}`,
-        chain: sepolia,
-        to: "0x0000000000000000000000000000000000000000",
-        value: parseEther("0"),
-        data: hexMessage as `0x${string}`,
-      });
+      let txHash: `0x${string}` | null = null;
+      try {
+        txHash = await walletClient.sendTransaction({
+          account: activeAddress as `0x${string}`,
+          chain: sepolia,
+          to: "0x0000000000000000000000000000000000000000",
+          value: parseEther("0"),
+          data: hexMessage as `0x${string}`,
+        });
+      } catch (error: unknown) {
+        // Handle Viem errors manually
+        if (error instanceof UserRejectedRequestError) {
+          inscriptionFSM.rejected();
+          console.error("User rejected the transaction:", error);
+          return null;
+        }
+        // All other errors
+        throw error;
+      }
 
       inscriptionFSM.sent();
 

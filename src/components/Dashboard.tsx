@@ -2,6 +2,7 @@ import {useWallets} from "@/hooks/useWallets";
 import {AccountsWrapper} from "./Accounts";
 import {Wallets} from "./Wallets";
 
+
 export const Dashboard = () => {
   const {wallets} = useWallets();
   return (

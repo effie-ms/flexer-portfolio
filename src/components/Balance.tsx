@@ -33,10 +33,11 @@ export const Balance = ({
             {formatNumber(totalUSD, {precision: 2, prefix: "$"})}
           </div>
         )}
-        {!isLoading && <SubmitButton
+        <SubmitButton
+          isVisible={!isInvalidNumber(totalUSD) && !isLoading}
           selectedAccount={selectedAccount}
           handleSubmitToChain={handleSubmitToChain}
-        />}
+        />
       </div>
     </div>
   );

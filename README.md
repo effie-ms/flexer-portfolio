@@ -1,30 +1,34 @@
+# Flexer Portfolio
+
+Implemented by Lizaveta Miasayedava (lizaveta.miasayedaav@gmail.com)
+
 ## Tasks
 
 ![Screenshot](public/readme/screenshot.png)
 
 TLTR:
 The flow: connect wallets -> select account (wallet) -> select chain -> view balances.
-Click on "Submit to Testnet" to send a transaction with a message. 
+Click on "Submit to Testnet" to send a transaction with a message.
 
 This repository includes the implementation of the following features:
 
-*NB:* The application is responsive for both large and small screens, but not supported on mobile devices.
+_NB:_ The application is responsive for both large and small screens, but not supported on mobile devices.
 
 ### 1. Wallet connection for Ethereum (Metamask, Phantom Ethereum wallets) and Solana wallets (Phantom Solana wallets)
 
-*NB:* Make sure the wallet extensions for Metamask and Phantom are installed. Otherwise wallet items are not interactive and are labeled as "Not installed".
+_NB:_ Make sure the wallet extensions for Metamask and Phantom are installed. Otherwise wallet items are not interactive and are labeled as "Not installed".
 
 Wallet connection for EVM wallets is handled via WagmiV2/Viem (chosen to simplify handling of overwrites of EVM wallets of each other, with handling of 1 EVM wallet at a time). Each Ethereum wallet connection states are handled via `useEthereumWallet()`.
 
 Wallet connection for SVM wallets is implemented via provider on `window.phantom.solana` with solana/web3.js.
 
-Once connected, the corresponding accounts are available in the dropdown on the right side. The balances are not mixed for both EVM and SVM and correspond to "one selected account and one selected chain". 
+Once connected, the corresponding accounts are available in the dropdown on the right side. The balances are not mixed for both EVM and SVM and correspond to "one selected account and one selected chain".
 
 ### 2. Fetching of tokens and chains using LiFi API. Implemented in `useLifiTokens()` and `useLifiChains()`, wrapped in SWR-styled fetches with caching and retries. No polling is enabled, just refetch on refocus within the session.
 
 The app shows all the returned tokens and chains, no pagination on fetch (not in API), but rendered browser-side via pagination with infinite scroll.
 
-*NB:* Rate-limiting errors are left on console.
+_NB:_ Rate-limiting errors are left on console.
 
 ### 3. Cumulative wallet balances
 
@@ -39,7 +43,7 @@ The balances for SPL tokens on SVM chains - via SPL program.
 
 ### 4. Sending balances to the chain
 
-*NB*: The balances are transacted to **Sepolia for EVM and Solana Devnet for SVM**. The balances sent in the payload correspond to the cumulative USD balance *on the chain selected in the dropdown* (*not balances on Sepolia for EVM and Solana Devnet for SVM*).
+_NB_: The balances are transacted to **Sepolia for EVM and Solana Devnet for SVM**. The balances sent in the payload correspond to the cumulative USD balance _on the chain selected in the dropdown_ (_not balances on Sepolia for EVM and Solana Devnet for SVM_).
 
 As sending data on EVM to normal wallets is not allowed, sending it to the Ethscription smart contract as calldata NFT-style.
 
@@ -49,9 +53,9 @@ Status updates are implemented via FSM singleton with event listeners.
 
 **Preliminary requirements to send transactions:**
 
-1) Switch Metamask to Sepolia chain in the wallet (added programmatic logic, but it does not work equally on different wallets).
-2) Enable Testing mode on Phantom.
-3) Get Sepolia ETH and SOL for Devnet to pay gas fees from the faucets.
+1. Switch Metamask to Sepolia chain in the wallet (added programmatic logic, but it does not work equally on different wallets).
+2. Enable Testing mode on Phantom.
+3. Get Sepolia ETH and SOL for Devnet to pay gas fees from the faucets.
 
 ## Running the application
 
@@ -61,7 +65,7 @@ Runtime: Node.js (v.20)
 Written in React.js (v.18), Typescript ES2018
 Styling: TailwindCSS
 
-1) Install dependencies: 
+1. Install dependencies:
 
 ```bash
 npm install
@@ -69,7 +73,7 @@ npm install
 
 No .env variables needed.
 
-2) Run the development server:
+2. Run the development server:
 
 ```bash
 npm run dev
@@ -83,3 +87,10 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Testing
+
+Run unit tests with:
+
+```bash
+npm run test
+```

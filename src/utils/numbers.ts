@@ -17,13 +17,6 @@ const DEFAULT_FORMATTING_PARAMS = {
   showPlus: false,
 };
 
-export const formatDate = (ts: number) =>
-  new Date(ts * 1000).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-
 export function shortenHash(hash: string): string {
   if (!hash || hash.length < 10) return hash;
   return `${hash.slice(0, 6)}...${hash.slice(-4)}`;

@@ -6,6 +6,7 @@ import {useChainBalance} from "@/hooks/useChainBalance";
 import {LifiChain} from "@/types/chains";
 import {AccountType} from "@/types/wallets";
 import {withChains, WithChainsProps} from "@/decorators/withChains";
+import {isInvalidNumber} from "@/utils/numbers";
 
 interface AccountWrapperProps {
   selectedAccount: AccountType;
@@ -46,10 +47,13 @@ const Account = ({selectedAccount, initialChain, chains}: AccountProps) => {
       />
       <Balance
         selectedAccount={selectedAccount}
-        isLoading={isLoadingBalance}
+        isLoading={isLoadingBalance && isInvalidNumber(totalUSD)}
         totalUSD={totalUSD}
       />
-      <TokenItems tokens={tokenBalances} isLoading={isLoadingBalance} />
+      <TokenItems
+        tokens={tokenBalances}
+        isLoading={isLoadingBalance && isInvalidNumber(totalUSD)}
+      />
     </div>
   );
 };
