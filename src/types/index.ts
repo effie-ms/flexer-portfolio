@@ -1,11 +1,11 @@
-import {EthereumWalletProvider, SolanaWalletProvider} from "./wallets";
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export {};
 declare global {
   interface Window {
-    ethereum?: EthereumWalletProvider;
+    ethereum?: any;
     phantom?: {
-      ethereum?: EthereumWalletProvider;
-      solana?: SolanaWalletProvider;
+      ethereum?: any;
+      solana?: any;
     };
   }
 }

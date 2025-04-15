@@ -1,79 +1,93 @@
-# Flexer Portfolio
+# Multi-Chain Wallet Balance & Inscription App
 
-Implemented by Lizaveta Miasayedava (lizaveta.miasayedaav@gmail.com)
+![App screenshot](./public/readme/screenshot.png)
 
-## Tasks
+## TL;DR
 
-![Screenshot](public/readme/screenshot.png)
+The flow: connect wallets → select account → select chain → view balances.  
+Click **"Submit to Testnet"** to send a transaction with an embedded message.
 
-TLTR:
-The flow: connect wallets -> select account (wallet) -> select chain -> view balances.
-Click on "Submit to Testnet" to send a transaction with a message.
+This repository includes implementations of the following features:
 
-This repository includes the implementation of the following features:
+> _Note:_ The application is responsive for both large and small screens, but **is not supported on mobile devices**.
 
-_NB:_ The application is responsive for both large and small screens, but not supported on mobile devices.
+---
 
-### 1. Wallet connection for Ethereum (Metamask, Phantom Ethereum wallets) and Solana wallets (Phantom Solana wallets)
+### 1. 🔐 Wallet Connection (Ethereum & Solana)
 
-_NB:_ Make sure the wallet extensions for Metamask and Phantom are installed. Otherwise wallet items are not interactive and are labeled as "Not installed".
+Supports Ethereum wallets (MetaMask, Phantom Ethereum) and Solana wallets (Phantom Solana).
 
-Wallet connection for EVM wallets is handled via WagmiV2/Viem (chosen to simplify handling of overwrites of EVM wallets of each other, with handling of 1 EVM wallet at a time). Each Ethereum wallet connection states are handled via `useEthereumWallet()`.
+> _Note:_ Make sure the MetaMask and Phantom browser extensions are installed. Otherwise, wallet options will be disabled and labeled as "Not installed."
 
-Wallet connection for SVM wallets is implemented via provider on `window.phantom.solana` with solana/web3.js.
+- Ethereum (EVM) wallet connection is handled via **Wagmi v2 / Viem**, chosen for its support of single-wallet connections and clean overrides. Each wallet’s state is managed via the `useEthereumWallet()` hook.
+- Solana (SVM) wallet connection is implemented using `window.phantom.solana` with `@solana/web3.js`, managed via `useSolanaWallet()`.
 
-Once connected, the corresponding accounts are available in the dropdown on the right side. The balances are not mixed for both EVM and SVM and correspond to "one selected account and one selected chain".
+Once connected, available accounts are listed in a dropdown on the right.  
+**Balances are shown for the selected account and chain only** and are not mixed between EVM and SVM.
 
-### 2. Fetching of tokens and chains using LiFi API. Implemented in `useLifiTokens()` and `useLifiChains()`, wrapped in SWR-styled fetches with caching and retries. No polling is enabled, just refetch on refocus within the session.
+---
 
-The app shows all the returned tokens and chains, no pagination on fetch (not in API), but rendered browser-side via pagination with infinite scroll.
+### 2. Token & Chain Fetching via LiFi API
 
-_NB:_ Rate-limiting errors are left on console.
+- Implemented in `useLifiTokens()` and `useLifiChains()`, wrapped in SWR-style fetchers with caching and retry logic.
+- No polling is used — data is only refetched on refocus within a session.
+- All returned tokens and chains are shown. There's no pagination on the API side, but infinite scroll is implemented client-side.
 
-### 3. Cumulative wallet balances
+> _Note:_ Rate-limiting errors happen and are still printed to the console.
 
-The balances are fetched for native tokens on LiFi's chains and for the ERC20/SPL tokens returned from the LiFi's API.
-The used USD prices are also from the LiFi's responses (no polling).
+---
 
-The total balance shown is the sum of native token balance and the other chain's tokens (ERC20/SPL tokens) balances.
-Since we need to know what tokens to request balances from, if tokens are not listed in LiFi's response, they are not going to be included in the balance. Tokens with invalid prices/balance type-wise are also filtered out.
+### 3. Cumulative Wallet Balances
 
-The balances for ERC20 tokens on EVM chains are fetched via multicall address.
-The balances for SPL tokens on SVM chains - via SPL program.
+- Native token and ERC20/SPL token balances are fetched for each chain supported by LiFi.
+- USD prices are retrieved from the LiFi response. No polling is used.
 
-### 4. Sending balances to the chain
+The **total balance** shown is the sum of the native token and other token balances on the selected chain.  
+Tokens not listed in the LiFi response are excluded, as are tokens with invalid prices or balances.
 
-_NB_: The balances are transacted to **Sepolia for EVM and Solana Devnet for SVM**. The balances sent in the payload correspond to the cumulative USD balance _on the chain selected in the dropdown_ (_not balances on Sepolia for EVM and Solana Devnet for SVM_).
+- ERC20 token balances on EVM chains are fetched using a **multicall contract**.
+- SPL token balances on Solana are fetched using the **SPL token program**.
 
-As sending data on EVM to normal wallets is not allowed, sending it to the Ethscription smart contract as calldata NFT-style.
+---
 
-The statuses of transaction stages are shown in toasts rendered in the bottom right corner. Once the transaction is sent and its hash is available, the link to it on the explorer appears under the button "Submit to Testnet".
+### 4. Submitting Balances On-Chain
 
-Status updates are implemented via FSM singleton with event listeners.
+> _Note:_ Transactions are sent to **Sepolia (EVM)** and **Solana Devnet (SVM)**.  
+> The payload contains the cumulative USD balance for the **selected chain** — not necessarily balances on Sepolia or Devnet.
 
-**Preliminary requirements to send transactions:**
+- On EVM, the payload is sent to the **Ethscription smart contract** using `calldata`, since normal EVM wallets cannot receive arbitrary data.
+- Transaction status updates are shown via toast notifications in the bottom-right corner.
+- Once a transaction is sent, a link to the block explorer appears under the **"Submit to Testnet"** button.
 
-1. Switch Metamask to Sepolia chain in the wallet (added programmatic logic, but it does not work equally on different wallets).
-2. Enable Testing mode on Phantom.
-3. Get Sepolia ETH and SOL for Devnet to pay gas fees from the faucets.
+State updates are managed by a **finite state machine (FSM)** singleton, using event listeners.
 
-## Running the application
+#### Prerequisites for Sending Transactions:
+
+1. Switch MetaMask to the **Sepolia** network.  
+   _(Programmatic switching is implemented, but wallet support may vary.)_
+2. Enable **Testing Mode** in Phantom.
+3. Fund your wallet with **Sepolia ETH** and **Solana Devnet SOL** from faucets to cover gas fees.
+
+---
+
+## Running the Application
 
 This is a [Next.js](https://nextjs.org) project.
 
-Runtime: Node.js (v.20)
-Written in React.js (v.18), Typescript ES2018
-Styling: TailwindCSS
+- **Runtime:** Node.js v20
+- **Framework:** React.js v18
+- **Language:** TypeScript (ES2018)
+- **Styling:** Tailwind CSS
 
-1. Install dependencies:
+### 1. Install dependencies
 
 ```bash
 npm install
 ```
 
-No .env variables needed.
+> No `.env` variables are required.
 
-2. Run the development server:
+### 2. Run the development server
 
 ```bash
 npm run dev
@@ -85,7 +99,9 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
 
 ## Testing
 

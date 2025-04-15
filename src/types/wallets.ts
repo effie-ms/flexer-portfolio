@@ -14,20 +14,8 @@ export interface WalletConnectorProps {
 export interface EthereumWalletProvider {
   isConnected: boolean;
   isMetaMask: boolean;
-  publicKey: PublicKey | null;
-  request: (args: {
-    method: string;
-    params?: unknown[] | object;
-  }) => Promise<unknown>;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  signAndSendTransaction: (
-    transaction: Transaction
-  ) => Promise<{signature: string}>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  on: (event: string, callback: (...args: any[]) => void) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  off: (event: string, callback: (...args: any[]) => void) => void;
 }
 
 export interface SolanaWalletProvider {
@@ -36,9 +24,6 @@ export interface SolanaWalletProvider {
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   signTransaction: (transaction: Transaction) => Promise<Transaction>;
-  signAndSendTransaction: (
-    transaction: Transaction
-  ) => Promise<{signature: string}>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   on: (event: string, callback: (...args: any[]) => void) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
