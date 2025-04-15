@@ -1,16 +1,16 @@
 import {withAccounts} from "@/decorators/withAccounts";
 import {AccountWrapper} from "./Account";
-import {WalletType} from "@/types/wallets";
+import {AccountType} from "@/types/wallets";
 import {useState} from "react";
 import {AccountSelector} from "./AccountSelector";
 
 interface AccountsWrapperProps {
-  wallets: WalletType[];
+  wallets: AccountType[];
 }
 
 interface AccountsProps {
-  accounts: WalletType[];
-  initialAccount: WalletType;
+  accounts: AccountType[];
+  initialAccount: AccountType;
 }
 
 export const AccountsWrapper = ({wallets}: AccountsWrapperProps) => {
@@ -25,7 +25,7 @@ export const AccountsWrapper = ({wallets}: AccountsWrapperProps) => {
 
 const Accounts = ({accounts, initialAccount}: AccountsProps) => {
   const [selectedAccount, setSelectedAccount] =
-    useState<WalletType>(initialAccount);
+    useState<AccountType>(initialAccount);
 
   return (
     <div className="flex flex-col w-full gap-3 my-5">

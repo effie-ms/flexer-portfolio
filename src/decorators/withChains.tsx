@@ -1,11 +1,11 @@
-import {WalletType} from "@/types/wallets";
+import {AccountType} from "@/types/wallets";
 
 export type WithChainsProps = {
-  selectedAccount: WalletType;
+  selectedAccount: AccountType;
 };
 
 export const withChains =
-  <P extends object>(selectedAccount: WalletType) =>
+  <P extends object>(selectedAccount: AccountType) =>
   (Component: React.ComponentType<P & WithChainsProps>) => {
     return function WithChainsWrapper(props: P) {
       const chains = selectedAccount?.chains || [];

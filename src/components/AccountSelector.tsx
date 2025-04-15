@@ -2,12 +2,12 @@ import clsx from "clsx";
 import {Dropdown} from "./ui/Dropdown";
 import Image from "next/image";
 import {shortenHash} from "@/utils/numbers";
-import {WalletType} from "@/types/wallets";
+import {AccountType} from "@/types/wallets";
 
 interface AccountSelectorProps {
-  accounts: WalletType[];
-  selectedAccount: WalletType | null;
-  setSelectedAccount: (account: WalletType) => void;
+  accounts: AccountType[];
+  selectedAccount: AccountType | null;
+  setSelectedAccount: (account: AccountType) => void;
 }
 
 export const AccountSelector = ({

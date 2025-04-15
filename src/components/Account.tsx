@@ -4,15 +4,15 @@ import {Chains} from "./Chains";
 import {TokenItems} from "./TokenItems";
 import {useChainBalance} from "@/hooks/useChainBalance";
 import {LifiChain} from "@/types/chains";
-import {WalletType} from "@/types/wallets";
+import {AccountType} from "@/types/wallets";
 import {withChains, WithChainsProps} from "@/decorators/withChains";
 
 interface AccountWrapperProps {
-  selectedAccount: WalletType;
+  selectedAccount: AccountType;
 }
 
 interface AccountProps {
-  selectedAccount: WalletType;
+  selectedAccount: AccountType;
   initialChain: LifiChain;
   chains: LifiChain[];
 }

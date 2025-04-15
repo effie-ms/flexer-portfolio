@@ -67,6 +67,8 @@ Styling: TailwindCSS
 npm install
 ```
 
+No .env variables needed.
+
 2) Run the development server:
 
 ```bash

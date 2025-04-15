@@ -2,7 +2,7 @@
 
 import {useEthereumWallet} from "@/hooks/useEthereumWallet";
 import {useSolanaWallet} from "@/hooks/useSolanaWallet";
-import {WalletType} from "@/types/wallets";
+import {AccountType} from "@/types/wallets";
 import {useLifiChains} from "./useLifiChains";
 
 export interface WalletConnector {
@@ -16,7 +16,7 @@ export interface WalletConnector {
   isLoading: boolean;
 }
 
-export const useWallets = (): {wallets: WalletType[]} => {
+export const useWallets = (): {wallets: AccountType[]} => {
   const {wallets: walletsEVM} = useEVMWallets();
   const {wallets: walletsSVM} = useSVMWallets();
 
@@ -25,7 +25,7 @@ export const useWallets = (): {wallets: WalletType[]} => {
   };
 };
 
-export const useEVMWallets = (): {wallets: WalletType[]} => {
+export const useEVMWallets = (): {wallets: AccountType[]} => {
   const {chains} = useLifiChains("EVM");
   const metamaskWallet = useEthereumWallet(
     "io.metamask",
@@ -58,7 +58,7 @@ export const useEVMWallets = (): {wallets: WalletType[]} => {
   };
 };
 
-const useSVMWallets = (): {wallets: WalletType[]} => {
+const useSVMWallets = (): {wallets: AccountType[]} => {
   const {chains} = useLifiChains("SVM");
   const phantomSVMWallet = useSolanaWallet(
     "phantomsvm",

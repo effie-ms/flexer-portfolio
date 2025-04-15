@@ -1,12 +1,12 @@
-import {WalletType} from "@/types/wallets";
+import {AccountType} from "@/types/wallets";
 
 export type WithAccountsProps = {
-  accounts: WalletType[];
-  initialAccount: WalletType;
+  accounts: AccountType[];
+  initialAccount: AccountType;
 };
 
 export const withAccounts =
-  <P extends object>(wallets: WalletType[]) =>
+  <P extends object>(wallets: AccountType[]) =>
   (Component: React.ComponentType<P & WithAccountsProps>) => {
     return function WithAccountsWrapper(props: P) {
       const accounts = wallets?.filter((wallet) => wallet.isConnected) ?? [];
