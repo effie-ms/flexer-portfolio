@@ -11,6 +11,7 @@ export default function Home() {
           name="description"
           content="ETH/SOL portfolios for Metamask and Phantom wallets"
         />
+        <meta name="robots" content="noindex, nofollow" />
       </Head>
       <ClientDesktopOnly>
         <Dashboard />
