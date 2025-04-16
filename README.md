@@ -1,8 +1,8 @@
-# Multi-Chain Wallet Balance & Inscription App
+# Flexer Portfolio - Wallet Balance & Inscription App
 
 Implemented by Lizaveta Miasayedava (lizaveta.miasayedava@gmail.com).
 
-Deployed to [https://flexer-portfolio.vercel.app/].
+Deployed to https://flexer-portfolio.vercel.app/.
 
 ![App screenshot](./public/readme/screenshot.png)
 
@@ -19,13 +19,13 @@ This repository includes implementations of the following features:
 
 ---
 
-### 1. 🔐 Wallet Connection (Ethereum & Solana)
+### 1. Wallet Connection (Ethereum & Solana)
 
 Supports Ethereum wallets (MetaMask, Phantom Ethereum) and Solana wallets (Phantom Solana).
 
 > _Note:_ Make sure the MetaMask and Phantom browser extensions are installed. Otherwise, wallet options will be disabled and labeled as "Not installed."
 
-- Ethereum (EVM) wallet connection is handled via **Wagmi v2 / Viem**, chosen for its support of single-wallet connections and clean overrides. Each wallet’s state is managed via the `useEthereumWallet()` hook.
+- Ethereum (EVM) wallet connection is handled via **Wagmi v2 / Viem**, chosen for its support of single-wallet connections and cleaner overrides. Each wallet’s state is managed via the `useEthereumWallet()` hook.
 - Solana (SVM) wallet connection is implemented using `window.phantom.solana` with `@solana/web3.js`, managed via `useSolanaWallet()`.
 
 Once connected, available accounts are listed in a dropdown on the right.  
