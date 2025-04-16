@@ -134,11 +134,18 @@ export const useSolanaWallet = (
       if (txHash) {
         inscriptionFSM.sent();
 
-        await connection.confirmTransaction({
-          signature: txHash,
-          blockhash,
-          lastValidBlockHeight,
-        });
+        try {
+          await connection.confirmTransaction({
+            signature: txHash,
+            blockhash,
+            lastValidBlockHeight,
+          });
+        } catch (err) {
+          if (err instanceof Error) {
+            inscriptionFSM.error();
+            return null;
+          }
+        }
 
         inscriptionFSM.confirmed();
       }

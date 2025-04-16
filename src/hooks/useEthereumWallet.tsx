@@ -8,11 +8,7 @@ import {
   UserRejectedRequestError,
 } from "viem";
 import {sepolia} from "wagmi/chains";
-import {
-  getWalletClient,
-  switchChain,
-  waitForTransactionReceipt,
-} from "@wagmi/core";
+import {getWalletClient, waitForTransactionReceipt} from "@wagmi/core";
 import {config} from "@/utils/wagmi";
 
 export const useEthereumWallet = (
@@ -74,14 +70,9 @@ export const useEthereumWallet = (
 
       inscriptionFSM.messagePrepared();
 
-      if (walletClient.chain?.id !== sepolia.id) {
-        await walletClient.addChain({chain: sepolia});
-        await walletClient.switchChain({id: sepolia.id});
-        await switchChain(config, {
-          chainId: sepolia.id,
-          connector: activeConnector,
-        });
-      }
+      await walletClient.switchChain({
+        id: sepolia.id,
+      });
 
       inscriptionFSM.signed();
 
