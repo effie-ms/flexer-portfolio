@@ -6,19 +6,24 @@ interface ClientOnlyProps {
 }
 
 export const ClientDesktopOnly = ({children}: ClientOnlyProps) => {
-  const [isSupported, setIsSupported] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const isMobile = isMobileDevice();
-    setIsSupported(!isMobile);
+    setIsMobile(isMobileDevice());
+    setHasMounted(true);
   }, []);
 
-  if (!isSupported)
+  if (isMobile)
     return (
-      <div className="flex items-center justify-center p-20 border border-white/10 bg-white/5 rounded-xl">
+      <div className="flex items-center justify-center text-center p-20 border border-white/10 bg-white/5 rounded-xl">
         Supported only on Desktop devices
       </div>
     );
 
-  return children;
+  if (hasMounted) {
+    return children;
+  }
+
+  return null;
 };

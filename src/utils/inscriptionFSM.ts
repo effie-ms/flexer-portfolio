@@ -25,9 +25,21 @@ const transitions: Record<
 > = {
   idle: {START: "preparing_message"},
   preparing_message: {MESSAGE_PREPARED: "awaiting_signature", ERROR: "failed"},
-  awaiting_signature: {SIGNED: "sending_transaction", ERROR: "failed", REJECTED: "rejected",},
-  sending_transaction: {SENT: "waiting_confirmation", ERROR: "failed"},
-  waiting_confirmation: {CONFIRMED: "completed", ERROR: "failed"},
+  awaiting_signature: {
+    SIGNED: "sending_transaction",
+    ERROR: "failed",
+    REJECTED: "rejected",
+  },
+  sending_transaction: {
+    SENT: "waiting_confirmation",
+    ERROR: "failed",
+    REJECTED: "rejected",
+  },
+  waiting_confirmation: {
+    CONFIRMED: "completed",
+    ERROR: "failed",
+    REJECTED: "rejected",
+  },
   completed: {START: "preparing_message"},
   failed: {START: "preparing_message"},
   rejected: {START: "preparing_message"},

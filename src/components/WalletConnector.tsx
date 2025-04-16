@@ -74,14 +74,14 @@ export const WalletConnector = ({
         ) : (
           <div className="w-10 h-10 rounded-md bg-white/10" />
         )}
-        <span className="text-xs sm:text-sm text-white leading-tight">
+        <span className="text-sm text-white leading-tight">
           {name}
         </span>
       </div>
       {Boolean(status) && (
         <div
           className={clsx(
-            "text-xs sm:text-sm text-white px-2 py-1 rounded-md text-center leading-tight",
+            "text-sm text-white px-2 py-1 rounded-md text-center leading-tight",
             status?.className
           )}
         >

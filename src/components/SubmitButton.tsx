@@ -40,8 +40,6 @@ export const SubmitButton = ({
     return !["idle", "completed", "failed", "rejected"].includes(status);
   }, [status]);
 
-  console.log(status)
-
   const transactionUrl = getTransactionUrl(
     transactionHash,
     selectedAccount.chainType

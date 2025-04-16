@@ -291,8 +291,6 @@ export const fetchSPLTokenBalances = async (
       })
       .filter(Boolean) as BalanceResult[];
 
-    console.log("Token accounts:", balances);
-
     const totalUsd = balances.reduce((sum, t) => sum + (t.usdValue ?? 0), 0);
 
     return {balances, totalUsd, error: null};

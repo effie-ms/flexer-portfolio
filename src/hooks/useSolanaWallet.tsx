@@ -4,6 +4,7 @@ import {
   Connection,
   Transaction,
   clusterApiUrl,
+  SendTransactionError,
 } from "@solana/web3.js";
 import {createMemoInstruction} from "@solana/spl-memo";
 import {inscriptionFSM} from "@/utils/inscriptionFSM";
@@ -103,21 +104,44 @@ export const useSolanaWallet = (
 
       inscriptionFSM.messagePrepared();
 
-      const signedTx = await provider.signTransaction(transaction);
+      let signedTx: Transaction | null = null;
+      try {
+        signedTx = await provider.signTransaction(transaction);
+      } catch (error) {
+        if (
+          error instanceof Error &&
+          error.message === "User rejected the request."
+        ) {
+          inscriptionFSM.rejected();
+          return null;
+        }
+        inscriptionFSM.error();
+        return null;
+      }
 
       inscriptionFSM.signed();
 
-      const txHash = await connection.sendRawTransaction(signedTx.serialize());
+      let txHash: string | null = null;
+      try {
+        txHash = await connection.sendRawTransaction(signedTx.serialize());
+      } catch (err) {
+        if (err instanceof SendTransactionError) {
+          inscriptionFSM.error();
+          return null;
+        }
+      }
 
-      inscriptionFSM.sent();
+      if (txHash) {
+        inscriptionFSM.sent();
 
-      await connection.confirmTransaction({
-        signature: txHash,
-        blockhash,
-        lastValidBlockHeight,
-      });
+        await connection.confirmTransaction({
+          signature: txHash,
+          blockhash,
+          lastValidBlockHeight,
+        });
 
-      inscriptionFSM.confirmed();
+        inscriptionFSM.confirmed();
+      }
 
       return txHash;
     } catch (err) {

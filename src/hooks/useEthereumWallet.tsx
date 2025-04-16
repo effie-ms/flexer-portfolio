@@ -2,7 +2,11 @@ import {useEffect, useMemo, useState} from "react";
 import {useAccount, useConnect, useDisconnect} from "wagmi";
 import {EthereumWalletProvider, WalletType} from "@/types/wallets";
 import {inscriptionFSM} from "@/utils/inscriptionFSM";
-import {parseEther, UserRejectedRequestError} from "viem";
+import {
+  parseEther,
+  TransactionExecutionError,
+  UserRejectedRequestError,
+} from "viem";
 import {sepolia} from "wagmi/chains";
 import {
   getWalletClient,
@@ -71,8 +75,8 @@ export const useEthereumWallet = (
       inscriptionFSM.messagePrepared();
 
       if (walletClient.chain?.id !== sepolia.id) {
-        walletClient.addChain({chain: sepolia});
-        walletClient.switchChain({id: sepolia.id});
+        await walletClient.addChain({chain: sepolia});
+        await walletClient.switchChain({id: sepolia.id});
         await switchChain(config, {
           chainId: sepolia.id,
           connector: activeConnector,
@@ -91,24 +95,25 @@ export const useEthereumWallet = (
           data: hexMessage as `0x${string}`,
         });
       } catch (error: unknown) {
-        // Handle Viem errors manually
         if (error instanceof UserRejectedRequestError) {
           inscriptionFSM.rejected();
-          console.error("User rejected the transaction:", error);
           return null;
         }
-        // All other errors
-        throw error;
+        if (error instanceof TransactionExecutionError) {
+          inscriptionFSM.error();
+          return null;
+        }
       }
 
-      inscriptionFSM.sent();
+      if (txHash) {
+        inscriptionFSM.sent();
 
-      const receipt = await waitForTransactionReceipt(config, {hash: txHash});
-      if (receipt.status === "success") {
-        inscriptionFSM.confirmed();
-      } else {
-        inscriptionFSM.error();
-        console.error("Transaction failed:", receipt);
+        const receipt = await waitForTransactionReceipt(config, {hash: txHash});
+        if (receipt.status === "success") {
+          inscriptionFSM.confirmed();
+        } else {
+          inscriptionFSM.error();
+        }
       }
 
       return txHash;

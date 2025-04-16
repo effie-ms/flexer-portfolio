@@ -1,5 +1,9 @@
 # Multi-Chain Wallet Balance & Inscription App
 
+Implemented by Lizaveta Miasayedava (lizaveta.miasayedava@gmail.com).
+
+Deployed to [https://flexer-portfolio.vercel.app/].
+
 ![App screenshot](./public/readme/screenshot.png)
 
 ## TL;DR
@@ -10,6 +14,8 @@ Click **"Submit to Testnet"** to send a transaction with an embedded message.
 This repository includes implementations of the following features:
 
 > _Note:_ The application is responsive for both large and small screens, but **is not supported on mobile devices**.
+
+> _Note:_ Limitation: Wallet connections are currently tested on Google Chrome browser only.
 
 ---
 
